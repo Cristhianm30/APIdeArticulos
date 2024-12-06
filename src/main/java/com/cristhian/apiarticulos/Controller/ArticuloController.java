@@ -4,10 +4,11 @@ package com.cristhian.apiarticulos.Controller;
 import com.cristhian.apiarticulos.Model.ArticuloModel;
 import com.cristhian.apiarticulos.Service.ArticuloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /*
@@ -44,7 +45,7 @@ public class ArticuloController {
         if(ok){
             return "Se elimino el usuario con ID:"+id;
         }else {
-            return "No se pudo eliminar el usuario con ID:"+id;
+            return "No se pudo eliminar el artículo con ID: " + id + ". Puede que no exista.";
         }
     }
 
@@ -52,6 +53,14 @@ public class ArticuloController {
     public ArticuloModel actualizarArticuloPorId(@PathVariable("id")Long id,@RequestBody ArticuloModel articuloActualizado){
         return this.articuloService.actualizarArticulo(id,articuloActualizado);
     }
+
+    // Manejo de excepciones específicas para este controlador
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> manejarExcepcion(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+
 
 
 
