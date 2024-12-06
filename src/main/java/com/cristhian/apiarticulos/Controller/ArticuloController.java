@@ -35,8 +35,13 @@ public class ArticuloController {
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<ArticuloModel> obtenerArticuloPorId(@PathVariable("id")Long id){
-        return this.articuloService.obtenerPorId(id);
+    public ResponseEntity<?> obtenerArticuloPorId(@PathVariable Long id) {
+        Optional<ArticuloModel> articulo = articuloService.obtenerPorId(id);
+        if (articulo.isPresent()) {
+            return ResponseEntity.ok(articulo.get());
+        } else {
+            return ResponseEntity.status(404).body("Articulo con ID " + id + " no encontrado.");
+        }
     }
 
     @DeleteMapping(path = "/{id}")

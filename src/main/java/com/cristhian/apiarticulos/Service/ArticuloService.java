@@ -29,7 +29,7 @@ public class ArticuloService {
     }
 
     public Optional<ArticuloModel> obtenerPorId(Long id){
-        return Optional.ofNullable(articuloRepository.findById(id).orElseThrow(() -> new RuntimeException("Artículo con ID " + id + " no encontrado.")));
+        return articuloRepository.findById(id);
     }
 
     public boolean eliminarArticulo(Long id) {
