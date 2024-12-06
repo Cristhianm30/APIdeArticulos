@@ -45,24 +45,18 @@ public class ArticuloController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public String eliminarArticuloPorId(@PathVariable("id")Long id){
-        boolean ok = this.articuloService.eliminarArticulo(id);
-        if(ok){
-            return "Se elimino el usuario con ID:"+id;
-        }else {
-            return "No se pudo eliminar el artículo con ID: " + id + ". Puede que no exista.";
+    public ResponseEntity<?> eliminarArticulo(@PathVariable Long id) {
+        boolean eliminado = articuloService.eliminarArticulo(id);
+        if (eliminado) {
+            return ResponseEntity.ok("Articulo con ID " + id + " eliminado.");
+        } else {
+            return ResponseEntity.status(404).body("Articulo con ID " + id + " no encontrado.");
         }
     }
 
     @PutMapping(path = "/{id}")
     public ArticuloModel actualizarArticuloPorId(@PathVariable("id")Long id,@RequestBody ArticuloModel articuloActualizado){
         return this.articuloService.actualizarArticulo(id,articuloActualizado);
-    }
-
-    // Manejo de excepciones específicas para este controlador
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> manejarExcepcion(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
 
